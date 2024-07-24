@@ -1,10 +1,11 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import { useGlobal } from "../context/globalContext";
 import date from "../assets/date.svg";
 import { addJobRequest } from "../utils/requests";
 import { jobInputType, jobType } from "../utils/types";
 
 import { useForm, SubmitHandler } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const AddJob = ({
   setJobs,
@@ -14,14 +15,24 @@ const AddJob = ({
   const {
     register,
     reset,
+    setValue,
+    getValues,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<jobInputType>();
 
   const { openModel, setOpenModel } = useGlobal();
-
-  if (!openModel) return null;
   // console.log(errors);
+
+  useEffect(() => {
+    const saved = sessionStorage.getItem("formData");
+    if (saved) {
+      const data = JSON.parse(saved);
+      for (let key in data) {
+        setValue(key as keyof jobInputType, data[key]);
+      }
+    }
+  }, [setValue]);
 
   const handleOverlayClick = (e: any) => {
     if (e.target.id === "overlay" || e.target.id === "overlayFade") {
@@ -29,17 +40,17 @@ const AddJob = ({
     }
   };
 
+  const saveForm = () => {
+    const formData = getValues();
+    sessionStorage.setItem("formData", JSON.stringify(formData));
+  };
+
   const addJob: SubmitHandler<jobInputType> = async (values: jobInputType) => {
     try {
       //   console.log(values);
-      // const { salaryFrom, salaryTo, ...rest } = values;
-      // const updatedValues = {
-      //   ...rest,
-      //   salaryRange: `${salaryFrom}-${salaryTo}`,
-      // };
       const data = await addJobRequest(values);
       reset();
-      //   console.log(data);
+      toast.success("Job Added");
       setJobs((prev) => [...prev, data.newJob]);
     } catch (error) {
       console.log(error);
@@ -47,6 +58,7 @@ const AddJob = ({
     setOpenModel(!openModel);
   };
 
+  if (!openModel) return null;
   return (
     <div
       id="overlay"
@@ -327,7 +339,7 @@ const AddJob = ({
             <button
               type="button"
               className="w-full  rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:w-auto sm:text-sm"
-              onClick={() => setOpenModel(!openModel)}
+              onClick={() => saveForm()}
             >
               Save
             </button>

@@ -8,11 +8,12 @@ import { useDebounce } from "../hooks/hooks";
 
 function Filters() {
   const { setJobLoading, setJobs } = useGlobal();
+
   const [showModal, setShowModal] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
   const [location, setLocation] = useState("");
   const [jobType, setJobType] = useState("");
-  const [salaryRange, setSalaryRange] = useState<number>(0);
+  const [salaryRange, setSalaryRange] = useState<number>(50000);
 
   const debounced = useDebounce(jobTitle);
   const salaryDebounced = useDebounce(salaryRange);
@@ -38,10 +39,6 @@ function Filters() {
     setSalaryRange(roundedValue);
   };
 
-  const handleChange = async (e: any) => {
-    setJobTitle(e.target.value);
-  };
-
   const handleModalToggle = () => {
     setShowModal(!showModal);
   };
@@ -55,7 +52,7 @@ function Filters() {
           <input
             placeholder="Search By Job Title"
             className="p-3 placeholder:text-left focus:outline-none rounded-lg w-full"
-            onChange={(e) => handleChange(e)}
+            onChange={(e) => setJobTitle(e.target.value)}
           />
         </div>
 
@@ -146,7 +143,7 @@ function Filters() {
                 <input
                   placeholder="Search By Job Title"
                   className="p-3 placeholder:text-left focus:outline-none rounded-lg w-full"
-                  onChange={(e) => handleChange(e)}
+                  onChange={(e) => setJobTitle(e.target.value)}
                 />
               </div>
 

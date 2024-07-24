@@ -28,9 +28,7 @@ export const getJobs = async (req: Request, res: Response) => {
       //   { salaryFrom: { $gte: lpaConversion } },
       //   { salaryTo: { $lte: lpaConversion } },
       // ];
-
       query.salaryFrom = { $lte: lpaConversion };
-      // query.salaryTo = { $gte: lpaConversion };
     }
 
     const jobs = await JobModel.find(query, { __v: 0 })

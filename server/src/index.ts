@@ -3,16 +3,17 @@ import cors from "cors";
 import { config } from "dotenv";
 import connectToDb from "./utils/dbConfig.js";
 import adminRouter from "./routes/adminRoutes.js";
+import helmet from "helmet";
 
 config();
 const app = express();
 
+app.use(helmet());
 app.use(
   cors({
     origin: "*",
   })
 );
-
 app.use(express.json());
 app.use(urlencoded({ extended: true }));
 app.use("/admin", adminRouter);

@@ -11,23 +11,28 @@ export const fetchJobs = async (
 ): Promise<jobType[] | null | undefined> => {
   const query = new URLSearchParams(filters).toString();
 
-  const response = await fetch(`http://localhost:3000/admin/jobs?${query}`);
+  const response = await fetch(
+    `https://carefree-grace-production.up.railway.app/admin/jobs?${query}`
+  );
   const data = await response.json();
   return data.jobs;
 };
 
 export const addJobRequest = async (payload: jobInputType) => {
-  console.log(payload);
+  // console.log(payload);
 
-  const response = await fetch("http://localhost:3000/admin/addJob", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
-  });
+  const response = await fetch(
+    "https://carefree-grace-production.up.railway.app/admin/addJob",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    }
+  );
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
 
   return data;
 };
