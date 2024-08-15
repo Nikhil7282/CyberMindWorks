@@ -12,7 +12,7 @@ export const fetchJobs = async (
   const query = new URLSearchParams(filters).toString();
 
   const response = await fetch(
-    `https://carefree-grace-production.up.railway.app/admin/jobs?${query}`
+    `https://cybermindworks-production.up.railway.app/admin/jobs?${query}`
   );
   const data = await response.json();
   return data.jobs;
